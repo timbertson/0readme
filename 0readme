@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import optparse
+from xml.dom.minidom import parse
+
+ns = "http://zero-install.sourceforge.net/2004/injector/interface"
+opts = None
+
+def main(xml_file):
+	dom = parse(xml_file)
+	description = dom.getElementsByTagNameNS(ns, "description")[0]
+	with open("README") as readme:
+		description.childNodes[0].data = "\n%s\t" % (readme.read(),)
+	with open(xml_file, 'w') as output:
+		dom.writexml(output)
+	os.execvp("xmlformat", ("xmlformat", xml_file,))
+
+def configure():
+	global opts
+	parser = optparse.OptionParser(usage="%prog [options] feed-file output-file")
+	opts, args = parser.parse_args()
+	return args
+
+if __name__ == '__main__':
+	args = configure()
+	main(*args)

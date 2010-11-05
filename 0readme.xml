@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
+<interface uri="http://gfxmonk.net/dist/0install/0readme.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+	<name>0readme</name>
+	<summary>use README with a 0install feed</summary>
+	<description>
+0readme
+------
+
+Replace the &lt;description&gt; tag of a 0install feed with the
+current contents of a README file.
+	</description>
+	<homepage>http://github.com/gfxmonk/0readme</homepage>
+	<needs-terminal/>
+	<group main="0readme">
+		<implementation id="sha1new=ce5848d0d605a1cd999c3a5b312bc3e9402f616d" released="2010-11-05" version="0.0.1">
+    <manifest-digest sha256="4e4caee68fce9091085a9425eaf67a89c7ce87ff113824eef83dac45fb0a2351"/>
+    <archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.1.tgz" size="547"/>
+  </implementation>
+	</group>
+</interface>

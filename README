@@ -1,0 +1,5 @@
+0readme
+------
+
+Replace the <description> tag of a 0install feed with the
+current contents of a README file.
