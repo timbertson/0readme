@@ -2,6 +2,12 @@ from unittest import TestCase
 import os
 import shutil
 from os.path import join
+
+import zero_readme
+class Object(object): pass
+zero_readme.opts = Object()
+zero_readme.opts.rich = True
+
 from zero_readme import main
 
 class ReadmeTest(TestCase):

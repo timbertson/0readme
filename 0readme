@@ -54,7 +54,7 @@ class Feed(object):
 			elems = self.dom.getElementsByTagNameNS(gfxmonk_ns, "rich-description")
 			self._remove(*elems)
 
-		if "." not in filename:
+		if "." not in filename or not opts.rich:
 			_remove()
 			return
 
@@ -111,6 +111,7 @@ class Feed(object):
 def configure():
 	global opts
 	parser = optparse.OptionParser(usage="%prog [options] feed-file output-file")
+	parser.add_option('--rich', help="add <rich-description> data", action='store_true', default=False)
 	opts, args = parser.parse_args()
 	return args
 
