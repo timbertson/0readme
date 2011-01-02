@@ -11,7 +11,8 @@ opts = None
 def main(xml_file):
 	dom = parse(xml_file)
 	description = dom.getElementsByTagNameNS(ns, "description")[0]
-	with open("README") as readme:
+	readme_file = [file for file in os.listdir(".") if file.lower().startswith('readme')][0]
+	with open(readme_file) as readme:
 		description.childNodes[0].data = "\n%s\t" % (readme.read(),)
 	with open(xml_file, 'w') as output:
 		dom.writexml(output)
