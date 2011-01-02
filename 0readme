@@ -3,20 +3,110 @@
 import os
 import sys
 import optparse
-from xml.dom.minidom import parse
+import re
+from xml.parsers import expat
+from xml.dom.minidom import parse, parseString
 
 ns = "http://zero-install.sourceforge.net/2004/injector/interface"
+gfxmonk_ns = "http://gfxmonk.net/dist/0install"
+xhtml_ns = "http://www.w3.org/1999/xhtml"
 opts = None
 
 def main(xml_file):
-	dom = parse(xml_file)
-	description = dom.getElementsByTagNameNS(ns, "description")[0]
+	feed = Feed(xml_file)
 	readme_file = [file for file in os.listdir(".") if file.lower().startswith('readme')][0]
-	with open(readme_file) as readme:
-		description.childNodes[0].data = "\n%s\t" % (readme.read(),)
-	with open(xml_file, 'w') as output:
-		dom.writexml(output)
-	os.execvp("xmlformat", ("xmlformat", xml_file,))
+	feed.set_description_from(readme_file)
+	feed.save()
+
+class Feed(object):
+	def __init__(self, filename):
+		self.dom = parse(filename)
+		self.filename = filename
+	
+	def set_description_from(self, filename):
+		self._set_plain_description(filename)
+		self._set_rich_description(filename)
+	
+	def _create_or_make_only(self, namespace, tag_name):
+		elems = self.dom.getElementsByTagNameNS(namespace, tag_name)
+		if len(elems) == 0:
+			elem = self.dom.createElementNS(namespace, tag_name)
+			first_group = self.dom.getElementsByTagNameNS(ns, "group")[0]
+			self.dom.getElementsByTagNameNS(ns, "interface")[0].insertBefore(elem, first_group)
+			elem.appendChild(self.dom.createTextNode(""))
+		else:
+			elem = elems[0]
+			map(self._remove, elems[1:])
+		return elem
+
+	def _remove(self, *nodes):
+		for node in nodes:
+			node.parentNode.removeChild(node)
+
+	def _set_plain_description(self, filename):
+		description = self._create_or_make_only(ns, "description")
+
+		with open(filename) as readme:
+			description.childNodes[0].data = "\n%s\t" % (readme.read(),)
+
+	def _set_rich_description(self, filename):
+		def _remove():
+			elems = self.dom.getElementsByTagNameNS(gfxmonk_ns, "rich-description")
+			self._remove(*elems)
+
+		if "." not in filename:
+			_remove()
+			return
+
+		try:
+			import subprocess
+			proc = subprocess.Popen(['pandoc', '--to=html', filename], stdout=subprocess.PIPE)
+			stdout, _ = proc.communicate()
+			if proc.returncode != 0:
+				raise RuntimeError("pandoc returned exit code %s" % (proc.returncode,))
+
+			# hacky: convert all tags to namespaced tags with a regex
+			stdout = re.sub('(</?)', '\\1h:', stdout)
+
+			# parse the resulting document
+			xml_doc = """<?xml version="1.0"?><html xmlns:h="%s">%s</html>""" % (xhtml_ns, stdout)
+			dom = parseString(xml_doc)
+
+			# and copy it to the feed's DOM
+			desc = self._create_or_make_only(gfxmonk_ns, "rich-description")
+			desc.setAttribute("xmlns:h", xhtml_ns)
+			desc.setAttribute("xmlns", gfxmonk_ns)
+			self._remove(*desc.childNodes)
+			for elem in dom.documentElement.childNodes:
+				desc.appendChild(elem.cloneNode(True))
+
+
+		except (StandardError, expat.error), e:
+			print >> sys.stderr, "Converting rich format failed: %s" % (e,)
+			_remove()
+
+	def save(self):
+		with open(self.filename, 'w') as output:
+			self.dom.writexml(output)
+		try:
+			import subprocess
+			ret = subprocess.call(["xmlformat", self.filename])
+			if ret != 0:
+				raise RuntimeError("xmlformat returned exit code: %s" % (ret,))
+		except StandardError, e:
+			print >> sys.stderr, "Could not run xmlformat on output: %s" % (e,)
+		self._fixup_improper_pre_indenting()
+	
+	def _fixup_improper_pre_indenting(self):
+		with open(self.filename) as input:
+			contents = input.read()
+
+		contents = re.sub("(?<=<h:pre>)\s*(?=<h:)", "", contents)
+		contents = re.sub("(?<=>)\s*(?=</h:pre>)", "", contents)
+		with open(self.filename, 'w') as output:
+			output.write(contents)
+
+
 
 def configure():
 	global opts

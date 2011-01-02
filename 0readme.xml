@@ -34,4 +34,10 @@ Usage:
 			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.2.tgz" size="587"/>
 		</implementation>
 	</group>
+
+	<group main="0readme">
+		<requires interface="http://gfxmonk.net/dist/0install/xmlformat.xml">
+			<environment insert="" name="PATH" mode="prepend"/>
+		</requires>
+	</group>
 </interface>
