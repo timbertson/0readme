@@ -65,20 +65,19 @@ class Feed(object):
 			if proc.returncode != 0:
 				raise RuntimeError("pandoc returned exit code %s" % (proc.returncode,))
 
-			# hacky: convert all tags to namespaced tags with a regex
-			stdout = re.sub('(</?)', '\\1h:', stdout)
-
 			# parse the resulting document
-			xml_doc = """<?xml version="1.0"?><html xmlns:h="%s">%s</html>""" % (xhtml_ns, stdout)
+			xml_doc = """<?xml version="1.0"?><html xmlns="%s">%s</html>""" % (xhtml_ns, stdout)
 			dom = parseString(xml_doc)
 
 			# and copy it to the feed's DOM
 			desc = self._create_or_make_only(gfxmonk_ns, "rich-description")
-			desc.setAttribute("xmlns:h", xhtml_ns)
 			desc.setAttribute("xmlns", gfxmonk_ns)
 			self._remove(*desc.childNodes)
+			desc_root = dom.createElementNS(xhtml_ns, 'div')
+			desc_root.setAttribute("xmlns", xhtml_ns)
+			desc.appendChild(desc_root)
 			for elem in dom.documentElement.childNodes:
-				desc.appendChild(elem.cloneNode(True))
+				desc_root.appendChild(elem.cloneNode(True))
 
 
 		except (StandardError, expat.error), e:
@@ -101,8 +100,8 @@ class Feed(object):
 		with open(self.filename) as input:
 			contents = input.read()
 
-		contents = re.sub("(?<=<h:pre>)\s*(?=<h:)", "", contents)
-		contents = re.sub("(?<=>)\s*(?=</h:pre>)", "", contents)
+		contents = re.sub("(?<=<pre>)\s*(?=<)", "", contents)
+		contents = re.sub("(?<=>)\s*(?=</pre>)", "", contents)
 		with open(self.filename, 'w') as output:
 			output.write(contents)
 
