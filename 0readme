@@ -14,8 +14,11 @@ opts = None
 
 def main(xml_file):
 	feed = Feed(xml_file)
-	readme_file = [file for file in os.listdir(".") if file.lower().startswith('readme')][0]
-	feed.set_description_from(readme_file)
+	readme_files = [file for file in os.listdir(".") if file.lower().startswith('readme')]
+	if not readme_files:
+		print >> sys.stderr, "No readme file found"
+		return 1
+	feed.set_description_from(readme_files[0])
 	feed.save()
 
 class Feed(object):
@@ -116,4 +119,4 @@ def configure():
 
 if __name__ == '__main__':
 	args = configure()
-	main(*args)
+	sys.exit(main(*args))

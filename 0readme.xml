@@ -31,14 +31,18 @@ Usage:
 			<manifest-digest sha256="4e4caee68fce9091085a9425eaf67a89c7ce87ff113824eef83dac45fb0a2351"/>
 			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.1.tgz" size="547"/>
 		</implementation>
-		<implementation id="sha1new=72896f528e5f8a4b5e62d9debcdcbc368f7f45a6" released="2011-01-02" version="0.0.2">
-			<manifest-digest sha256="282865d1bfe7095eb9fb51e7b3904012422871f392787a5cbba831fe666b696c"/>
-			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.2.tgz" size="587"/>
-		</implementation>
 	</group>
 	<group main="0readme">
 		<environment insert="" mode="append" name="PYTHONPATH"/>
 		<environment insert="" mode="append" name="PATH"/>
 		<requires interface="http://gfxmonk.net/dist/0install/xmlformat.xml"/>
+		<implementation id="sha1new=72896f528e5f8a4b5e62d9debcdcbc368f7f45a6" released="2011-01-02" version="0.0.2">
+			<manifest-digest sha256="282865d1bfe7095eb9fb51e7b3904012422871f392787a5cbba831fe666b696c"/>
+			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.2.tgz" size="587"/>
+		</implementation>
+		<implementation id="sha1new=026bbb41d2022e9b9b4c42fba1d59584c585ecf9" released="2011-01-10" version="0.0.3">
+			<manifest-digest sha256="1ac857b03a561e422aade323be265d103c517d969b9aa4151c23b902ed6130bc"/>
+			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.3.tgz" size="1619"/>
+		</implementation>
 	</group>
 </interface>
