@@ -14,11 +14,11 @@ opts = None
 
 def main(xml_file):
 	feed = Feed(xml_file)
-	readme_files = [file for file in os.listdir(".") if file.lower().startswith('readme')]
+	readme_files = [file for file in os.listdir(".") if os.path.splitext(file)[0].lower() == 'readme']
 	if not readme_files:
 		print >> sys.stderr, "No readme file found"
 		return 1
-	feed.set_description_from(readme_files[0])
+	feed.set_description_from(max(readme_files, key=len))
 	feed.save()
 
 class Feed(object):
