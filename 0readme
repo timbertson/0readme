@@ -103,8 +103,10 @@ class Feed(object):
 		with open(self.filename) as input:
 			contents = input.read()
 
-		contents = re.sub("(?<=<pre>)\s*(?=<)", "", contents)
-		contents = re.sub("(?<=>)\s*(?=</pre>)", "", contents)
+		begin = re.compile(r"(?<=<pre>)[\s\n]*(?=<)", re.DOTALL)
+		end = re.compile(r"(?<=>)[\s\n]*(?=</pre>)", re.DOTALL)
+		contents = re.sub(begin, "", contents)
+		contents = re.sub(end, "", contents)
 		with open(self.filename, 'w') as output:
 			output.write(contents)
 

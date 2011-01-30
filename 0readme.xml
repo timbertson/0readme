@@ -48,5 +48,9 @@ Usage:
 			<manifest-digest sha256="2805abe66247b7f4a6917b4467851d796042915087b18ace48d82f6bdcadb78c"/>
 			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.4.tgz" size="1636"/>
 		</implementation>
+		<implementation id="sha1new=e764e8331541dde29aff12fff2d3e189d548872e" released="2011-01-30" version="0.1">
+    <manifest-digest sha256="ed18cf2fda3cf5ed66497fff5acedbb8ec8d842a699dd3faf37580be1beae338"/>
+    <archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.1.tgz" size="1672"/>
+  </implementation>
 	</group>
 </interface>
