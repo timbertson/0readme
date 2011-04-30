@@ -1,9 +1,9 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <?xml-stylesheet type='text/xsl' href='interface.xsl'?>
-<interface uri="http://gfxmonk.net/dist/0install/0readme.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface" uri="http://gfxmonk.net/dist/0install/0readme.xml">
 	<name>0readme</name>
 	<summary>use README with a 0install feed</summary>
-	<publish mode="0tools" xmlns="http://gfxmonk.net/dist/0install"/>
+	<publish xmlns="http://gfxmonk.net/dist/0install" mode="0tools"/>
 	<description>
 0readme
 ------
@@ -36,6 +36,7 @@ Usage:
 		<environment insert="" mode="prepend" name="PYTHONPATH"/>
 		<environment insert="" mode="prepend" name="PATH"/>
 		<requires interface="http://gfxmonk.net/dist/0install/xmlformat.xml"/>
+		<requires interface="http://gfxmonk.net/dist/0install/pandoc.xml"/>
 		<implementation id="sha1new=72896f528e5f8a4b5e62d9debcdcbc368f7f45a6" released="2011-01-02" version="0.0.2">
 			<manifest-digest sha256="282865d1bfe7095eb9fb51e7b3904012422871f392787a5cbba831fe666b696c"/>
 			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.2.tgz" size="587"/>
@@ -49,8 +50,12 @@ Usage:
 			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.0.4.tgz" size="1636"/>
 		</implementation>
 		<implementation id="sha1new=e764e8331541dde29aff12fff2d3e189d548872e" released="2011-01-30" version="0.1">
-    <manifest-digest sha256="ed18cf2fda3cf5ed66497fff5acedbb8ec8d842a699dd3faf37580be1beae338"/>
-    <archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.1.tgz" size="1672"/>
-  </implementation>
+			<manifest-digest sha256="ed18cf2fda3cf5ed66497fff5acedbb8ec8d842a699dd3faf37580be1beae338"/>
+			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.1.tgz" size="1672"/>
+		</implementation>
+		<implementation id="sha1new=ea313e739c25ac6b1e0e7b7785a31b63995d6f58" released="2011-04-30" version="0.1.1">
+			<manifest-digest sha256="61e31225820aeb2d3962712d42d625705d129c0c1736fa6d6fe34c1379206cce"/>
+			<archive href="http://gfxmonk.net/dist/0install/0readme/0readme-0.1.1.tgz" size="1669"/>
+		</implementation>
 	</group>
 </interface>

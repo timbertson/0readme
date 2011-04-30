@@ -61,10 +61,10 @@ class Feed(object):
 			_remove()
 			return
 
+		import subprocess
+		proc = subprocess.Popen(['pandoc', '--to=html', filename], stdout=subprocess.PIPE)
+		stdout, _ = proc.communicate()
 		try:
-			import subprocess
-			proc = subprocess.Popen(['pandoc', '--to=html', filename], stdout=subprocess.PIPE)
-			stdout, _ = proc.communicate()
 			if proc.returncode != 0:
 				raise RuntimeError("pandoc returned exit code %s" % (proc.returncode,))
 
@@ -114,7 +114,7 @@ class Feed(object):
 
 def configure():
 	global opts
-	parser = optparse.OptionParser(usage="%prog [options] feed-file output-file")
+	parser = optparse.OptionParser(usage="%prog [options] feed-file")
 	parser.add_option('--rich', help="add <rich-description> data", action='store_true', default=False)
 	opts, args = parser.parse_args()
 	return args
