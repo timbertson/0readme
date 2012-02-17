@@ -50,7 +50,7 @@ class Feed(object):
 		description = self._create_or_make_only(ns, "description")
 
 		with open(filename) as readme:
-			description.childNodes[0].data = "\n%s\t" % (readme.read().decode('utf-8'),)
+			description.childNodes[0].data = "\n%s\t" % (readme.read().decode('ascii', 'ignore'),)
 
 	def _set_rich_description(self, filename):
 		def _remove():
@@ -63,10 +63,11 @@ class Feed(object):
 
 		import subprocess
 		proc = subprocess.Popen(['pandoc', '--to=html', filename], stdout=subprocess.PIPE)
-		stdout, _ = proc.communicate().decode('utf-8')
+		stdout, _ = proc.communicate()
 		try:
 			if proc.returncode != 0:
 				raise RuntimeError("pandoc returned exit code %s" % (proc.returncode,))
+			stdout = stdout.decode('ascii', 'ignore')
 
 			# parse the resulting document
 			xml_doc = """<?xml version="1.0"?><html xmlns="%s">%s</html>""" % (xhtml_ns, stdout)
@@ -88,7 +89,7 @@ class Feed(object):
 			_remove()
 
 	def save(self):
-		contents = self.dom.toxml(encoding='UTF-8')
+		contents = self.dom.toxml()
 		with open(self.filename, 'w') as output:
 			output.write(contents)
 		try:
