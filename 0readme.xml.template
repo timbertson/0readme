@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+	<name>0readme</name>
+	<summary>use README with a 0install feed</summary>
+	<publish xmlns="http://gfxmonk.net/dist/0install" mode="0tools"/>
+	<feed-for interface="http://gfxmonk.net/dist/0install/0readme.xml"/>
+	<description>
+0readme
+------
+
+Replace the &lt;description&gt; tag of a 0install feed with the
+current contents of a README file, properly XML-escaped.
+
+This allows you to keep your feed's description up to date
+with your README file.
+
+If you don't have a README file, it will use the first file
+in the current directory that starts with 'readme', ignoring
+case.
+
+Usage:
+	0readme feed.xml
+
+	</description>
+	<homepage>http://github.com/gfxmonk/0readme</homepage>
+	<needs-terminal/>
+	<group main="0readme">
+		<environment insert="" mode="prepend" name="PYTHONPATH"/>
+		<environment insert="" mode="prepend" name="PATH"/>
+		<requires interface="http://gfxmonk.net/dist/0install/xmlformat.xml"/>
+		<requires interface="http://gfxmonk.net/dist/0install/pandoc.xml"/>
+		<implementation version="{version}">
+			<manifest-digest/>
+			<archive href="{archive}"/>
+		</implementation>
+	</group>
+</interface>
