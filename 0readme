@@ -45,12 +45,17 @@ class Feed(object):
 	def _remove(self, *nodes):
 		for node in nodes:
 			node.parentNode.removeChild(node)
+	
+	def _escape_0template(self, str):
+		if self.filename.endswith('.template'):
+			return str.replace('{','{{').replace('}','}}')
+		return str
 
 	def _set_plain_description(self, filename):
 		description = self._create_or_make_only(ns, "description")
 
 		with open(filename) as readme:
-			description.childNodes[0].data = "\n%s\t" % (readme.read().decode('ascii', 'ignore'),)
+			description.childNodes[0].data = self._escape_0template("\n%s\t" % (readme.read().decode('ascii', 'ignore'),))
 
 	def _set_rich_description(self, filename):
 		def _remove():
@@ -67,7 +72,7 @@ class Feed(object):
 		try:
 			if proc.returncode != 0:
 				raise RuntimeError("pandoc returned exit code %s" % (proc.returncode,))
-			stdout = stdout.decode('ascii', 'ignore')
+			stdout = self._escape_0template(stdout.decode('ascii', 'ignore'))
 
 			# parse the resulting document
 			xml_doc = """<?xml version="1.0"?><html xmlns="%s">%s</html>""" % (xhtml_ns, stdout)
