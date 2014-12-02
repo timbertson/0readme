@@ -55,7 +55,7 @@ class Feed(object):
 		description = self._create_or_make_only(ns, "description")
 
 		with open(filename) as readme:
-			description.childNodes[0].data = self._escape_0template("\n%s\t" % (readme.read().decode('ascii', 'ignore'),))
+			description.childNodes[0].data = self._escape_0template("\n%s\t" % (readme.read().decode('utf-8', 'ignore'),))
 
 	def _set_rich_description(self, filename):
 		def _remove():
@@ -72,7 +72,7 @@ class Feed(object):
 		try:
 			if proc.returncode != 0:
 				raise RuntimeError("pandoc returned exit code %s" % (proc.returncode,))
-			stdout = self._escape_0template(stdout.decode('ascii', 'ignore'))
+			stdout = self._escape_0template(stdout.decode('utf-8', 'ignore'))
 
 			# parse the resulting document
 			xml_doc = """<?xml version="1.0"?><html xmlns="%s">%s</html>""" % (xhtml_ns, stdout)
@@ -96,7 +96,7 @@ class Feed(object):
 	def save(self):
 		contents = self.dom.toxml()
 		with open(self.filename, 'w') as output:
-			output.write(contents)
+			output.write(contents.encode('utf-8', 'xmlcharrefreplace'))
 		try:
 			import subprocess
 			ret = subprocess.call(["xmlformat", self.filename])
