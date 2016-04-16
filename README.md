@@ -1,3 +1,5 @@
+<img src="http://gfxmonk.net/dist/status/project/0readme.png">
+
 0readme
 ------
 
